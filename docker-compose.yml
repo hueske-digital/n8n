@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   app:
     image: n8nio/n8n:latest
@@ -48,14 +46,14 @@ services:
       - app
 
   db:
-    image: postgres:17-alpine
+    image: pgautoupgrade/pgautoupgrade:latest
     restart: unless-stopped
     environment:
       - POSTGRES_USER=n8n
       - POSTGRES_PASSWORD=n8n
       - POSTGRES_DB=n8n
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
     networks:
       app_db:
     labels:
