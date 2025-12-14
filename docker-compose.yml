@@ -60,7 +60,7 @@ services:
       - ofelia.restart=true
       - ofelia.enabled=true
       - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.schedule=0 0 1 * * *"
-      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'pg_dumpall -U n8n -f /var/lib/postgresql/data/backup.sql'"
+      - "ofelia.job-exec.${COMPOSE_PROJECT_NAME}dbbackup.command=sh -c 'pg_dumpall -U n8n -f /var/lib/postgresql/backup.sql'"
 
 volumes:
   app_data:
