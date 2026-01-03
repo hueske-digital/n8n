@@ -3,12 +3,12 @@ services:
     image: n8nio/n8n:latest
     restart: unless-stopped
     environment:
-      - N8N_HOST
+      - N8N_HOST=${CADDY_DOMAIN}
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_PORT=443
+      - N8N_PORT=5678
       - N8N_PROTOCOL=https
       - NODE_ENV=production
-      - WEBHOOK_URL=https://${N8N_HOST}/
+      - WEBHOOK_URL=https://${CADDY_DOMAIN}/
       - GENERIC_TIMEZONE=Europe/Berlin
       - DB_TYPE=postgresdb
       - DB_POSTGRESDB_HOST=db
@@ -25,12 +25,15 @@ services:
       - N8N_GIT_NODE_DISABLE_BARE_REPOS=true
       - N8N_SKIP_AUTH_ON_OAUTH_CALLBACK=false
       - N8N_PROXY_HOPS=1
+      - CADDY_DOMAIN=${CADDY_DOMAIN}
+      - CADDY_TYPE=${CADDY_TYPE:-external}
+      - CADDY_PORT=${CADDY_PORT:-5678}
     volumes:
       - app_data:/home/node/.n8n
     networks:
-      proxy_apps:
-      app_db:
-      app_runner:
+      - caddy
+      - app_db
+      - app_runner
     depends_on:
       - db
 
@@ -67,8 +70,6 @@ volumes:
   db_data:
 
 networks:
+  caddy:
   app_db:
   app_runner:
-  proxy_apps:
-    name: proxy_apps
-    external: true
